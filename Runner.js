@@ -12,6 +12,7 @@ function PreformSubnet(IP, Subnets, Masking)
         networks.push(new Network(parseInt(Subnets[i])));
     }
     new SubnetMasking(IP, networks, masking);
+    println("<HR>");
 }
 
 
