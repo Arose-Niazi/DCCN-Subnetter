@@ -49,8 +49,6 @@ class IPAddress {
                     }
                     this.ip[1] <<= value - 16;
                 }
-                else
-                    this.ip[1] = 255;
             }
             case 'B':
             {
@@ -64,8 +62,6 @@ class IPAddress {
                     }
                     this.ip[2] <<= value - 8;
                 }
-                else
-                    this.ip[2] = 255;
             }
             case 'C':
             {
