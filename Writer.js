@@ -14,9 +14,15 @@ function printHeading(string, center, heading)
     else document.getElementById("Output").innerHTML += "<"+heading+">" + string + "</"+heading+">\n";
 }
 
+function clearOutput()
+{
+    document.getElementById("Output").innerHTML="";
+}
+
+
 function createTable(headings)
 {
-    headings = headings.split(",");
+
     document.getElementById("Output").innerHTML += "<div class='container'><div class='table' id='TableNo"+nextTableID+"'></div></div>";
 
     let string = "<div class='table-header'>";
@@ -25,7 +31,6 @@ function createTable(headings)
         string += "<div class='header__item'><a id='"+headings[i]+"' class='filter__link' href='#'>" + headings[i] + "</a></div>";
         console.log(headings[i]);
     }
-    console.log(string);
 
     document.getElementById("TableNo" + nextTableID).innerHTML += string+ "</div>";
     document.getElementById("TableNo" + nextTableID).innerHTML += "<div id='ContentTableNo"+nextTableID+"' class='table-content'></div>";
@@ -34,7 +39,7 @@ function createTable(headings)
 
 function addTableRow(data)
 {
-    data = data.split(",");
+    //data = data.split(",");
     let string = "<div class='table-row'>";
     for(let i=0; i<data.length; i++)
     {

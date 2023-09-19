@@ -59,16 +59,17 @@ class SubnetMasking {
         printHeading("Calculations")
         println("Max hosts = " + maxHost);
         println("2<sup>n</sup> - 2 ≥ "  + maxHost);
-        println("2<sup>"+value.toString()+"</sup> - 2 ≥ " +( Math.pow(2,value) - 2));
-        println("n ≥ " + value);
+        println("2<sup>"+value.toString()+"</sup> - 2 = " +( Math.pow(2,value) - 2));
+        println(( Math.pow(2,value) - 2)+" ≥ " + maxHost);
+        println("n = " + value);
         println("");
 
         this.ipAddress.shiftValue(value);
-        printHeading("CIDR/Subnet Mask: "+this.ipAddress.getSubnet()+ "/" + cidr, true, "h4");
+        if(!vlsm) printHeading("CIDR/Subnet Mask: "+this.ipAddress.getSubnet()+ "/" + cidr, true, "h4");
 
 
-        if(vlsm) createTable("Subnet,Hosts,Network IP,Broadcast IP,IP Range");
-        else createTable("Subnet,Network IP,Broadcast IP,IP Range");
+        if(vlsm) createTable(["Subnet","Hosts","Subnet Mask","Network IP","Broadcast IP","IP Range"]);
+        else createTable(["Subnet","Network IP","Broadcast IP","IP Range"]);
 
 
         let size = Math.pow(2, value);
@@ -97,17 +98,24 @@ class SubnetMasking {
             let subnet = new Subnet(host, cidr, size);
             this.subnets.push(subnet);
             counterC++;
-            let string = counterC;
-            if(vlsm) string += "," +this.networks[0].getConnections()+ " (n -> "+subnet.size+")";
-            string +="," + subnet.host + "/" + cidr;
-            string +="," + subnet.broadcast + "/" + cidr;
-            string +="," + subnet.range[0] + "/"+cidr+" to " + subnet.range[subnet.range.length-1] + "/" + cidr;
+            let string = [counterC];
+            if(vlsm)
+            {
+                string.push(this.networks[0].getConnections()+ " (n &#8594; "+value+")");
+                string.push(this.ipAddress.getSubnet());
+            }
+            string.push(subnet.host + "/" + subnet.cidr);
+            string.push(subnet.broadcast + "/" + subnet.cidr);
+            string.push(subnet.range[0] + "/"+subnet.cidr+" to " + subnet.range[subnet.range.length-1] + "/" + subnet.cidr);
             addTableRow(string);
             if(counterC >= maxNetworks) break;
             if(vlsm)
             {
+                let oldValue = value;
                 networks.shift();
                 value = this.calculateValue();
+                cidr+=oldValue-value;
+                this.ipAddress.shiftValue(value);
             }
         }
     }
